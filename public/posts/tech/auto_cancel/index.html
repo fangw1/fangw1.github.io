@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Tech | Patrick&#39;s Blog</title>
+<meta name="keywords" content="">
+<meta name="description" content="生成订单30分钟未支付，则自动取消，该怎么实现？ 在开发中，往往会遇到一些关于延时任务的需求。例如 生成订单30分钟未支付，则自动取消 生成订单6">
+<meta name="author" content="
+作者:&nbsp;Patrick">
+<link rel="canonical" href="http://fangw.online/posts/tech/auto_cancel/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.dd1b6faf624e5755c15f8dcbebe3baddf132af6fccc93770550b6804e12de142.css" integrity="sha256-3Rtvr2JOV1XBX43L6&#43;O63fEyr2/MyTdwVQtoBOEt4UI=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+        onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://fangw.online/img/Q.png">
+<link rel="icon" type="image/png" sizes="16x16" href="http://fangw.online/img/Q.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://fangw.online/img/Q.png">
+<link rel="apple-touch-icon" href="http://fangw.online/Q.png">
+<link rel="mask-icon" href="http://fangw.online/Q.png">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = ""; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<meta property="og:title" content="Tech" />
+<meta property="og:description" content="生成订单30分钟未支付，则自动取消，该怎么实现？ 在开发中，往往会遇到一些关于延时任务的需求。例如 生成订单30分钟未支付，则自动取消 生成订单6" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://fangw.online/posts/tech/auto_cancel/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-05-05T00:17:58&#43;08:00" />
+<meta property="article:modified_time" content="2022-05-05T00:17:58&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Tech"/>
+<meta name="twitter:description" content="生成订单30分钟未支付，则自动取消，该怎么实现？ 在开发中，往往会遇到一些关于延时任务的需求。例如 生成订单30分钟未支付，则自动取消 生成订单6"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "📚文章",
+      "item": "http://fangw.online/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "👨🏻‍💻 技术",
+      "item": "http://fangw.online/posts/tech/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  4 ,
+      "name": "Tech",
+      "item": "http://fangw.online/posts/tech/auto_cancel/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Tech",
+  "name": "Tech",
+  "description": "生成订单30分钟未支付，则自动取消，该怎么实现？ 在开发中，往往会遇到一些关于延时任务的需求。例如 生成订单30分钟未支付，则自动取消 生成订单6",
+  "keywords": [
+    ""
+  ],
+  "articleBody": "生成订单30分钟未支付，则自动取消，该怎么实现？ 在开发中，往往会遇到一些关于延时任务的需求。例如\n生成订单30分钟未支付，则自动取消 生成订单60秒后,给用户发短信 对上述的任务，我们给一个专业的名字来形容，那就是延时任务。那么这里就会产生一个问题，这个延时任务和定时任务的区别究竟在哪里呢？一共有如下几点区别\n定时任务有明确的触发时间，延时任务没有 定时任务有执行周期，而延时任务在某事件触发后一段时间内执行，没有执行周期 定时任务一般执行的是批处理操作是多个任务，而延时任务一般是单个任务 一般实现的方法有几种：\n使用 rocketmq、rabbitmq、pulsar 等消息队列的延时投递功能 使用 redisson 提供的 DelayedQueue 有一些方案虽然广为流传但存在着致命缺陷，不要用来实现延时任务\n使用 redis 的过期监听 使用 rabbitmq 的死信队列 使用非持久化的时间轮 数据库轮询 👍 数据量，并发量并不大的系统，可以使用这个方案。\n该方案通常是在小型项目中使用，即通过一个线程定时的去扫描数据库，通过订单时间来判断是否有超时的订单，然后进行update或delete等操作。\n优点: 简单易行，支持集群操作 缺点: (1)对服务器内存消耗大 (2)存在延迟，比如你每隔3分钟扫描一次，那最坏的延迟时间就是3分钟 (3)假设你的订单有几千万条，每隔几分钟这样扫描一次，数据库损耗极大 JDK的延迟队列 🙊 该方案是利用JDK自带的DelayQueue来实现，这是一个无界阻塞队列，该队列只有在延迟期满的时候才能从中获取元素，放入DelayQueue中的对象，是必须实现Delayed接口的。\n优点: 效率高,任务触发时间延迟低。 缺点: (1)服务器重启后，数据全部消失，怕宕机 (2)集群扩展相当麻烦 (3)因为内存条件限制的原因，比如下单未付款的订单数太多，那么很容易就出现OOM异常 (4)代码复杂度较高 时间轮算法 🙊 时间轮是一种很优秀的定时任务的数据结构，然而绝大多数时间轮实现是纯内存没有持久化的。\nredis缓存过期监听 🙊 Redis 官方手册的keyspace-notifications: timing-of-expired-events中明确指出：\nBasically expired events are generated when the Redis server deletes the key and not when the time to live theoretically reaches the value of zero\nredis 自动过期的实现方式是：定时任务离线扫描并删除部分过期键；在访问键时惰性检查是否过期并删除过期键。redis 从未保证会在设定的过期时间立即删除并发送过期通知。实际上，过期通知晚于设定的过期时间数分钟的情况也比较常见。\n此外键空间通知采用的是发送即忘(fire and forget)策略，并不像消息队列一样保证送达。当订阅事件的客户端会丢失所有在断线期间所有分发给它的事件。\nRedission RDelayedQueue redisson delayqueue 是一种基于 redis zset 结构的延时队列实现。delayqueue 中有一个名为 timeoutSetName 的有序集合，其中元素的 score 为投递时间戳。delayqueue 会定时使用 zrangebyscore 扫描已到投递时间的消息，然后把它们移动到就绪消息列表中。\ndelayqueue 保证 redis 不崩溃的情况下不会丢失消息，在没有更好的解决方案时不妨一试。\n在数据库索引设计良好的情况下，定时扫描数据库中未完成的订单产生的开销并没有想象中那么大。在使用 redisson delayqueue 等定时任务中间件时可以同时使用扫描数据库的方法作为补偿机制，避免中间件故障造成任务丢失。\n基于 Redis 实现延迟队列\n消息队列 👍 优点: 高效,可以利用消息队列的分布式特性轻易的进行横向扩展,消息支持持久化增加了可靠性。 缺点：依赖消息队列，复杂度和成本变高 RocketMQ 实现 Kafka 实现 ",
+  "wordCount" : "1389",
+  "inLanguage": "en",
+  "datePublished": "2022-05-05T00:17:58+08:00",
+  "dateModified": "2022-05-05T00:17:58+08:00",
+  "author":[{
+    "@type": "Person",
+    "name": "Patrick"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://fangw.online/posts/tech/auto_cancel/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Patrick's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://fangw.online/img/Q.png"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://fangw.online" accesskey="h" title="Patrick&#39;s Blog (Alt + H)">
+            <img src="http://fangw.online/img/Q.png" alt="logo" aria-label="logo"
+                 height="30">Patrick&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://fangw.online/search" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://fangw.online/" title="🏠主页">
+                <span>🏠主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://fangw.online/posts" title="📚文章">
+                <span>📚文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://fangw.online/archives/" title="⏱时间轴">
+                <span>⏱时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://fangw.online/tags" title="🔖标签">
+                <span>🔖标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://fangw.online/about" title="🙋🏻‍♂️关于">
+                <span>🙋🏻‍♂️关于</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main page">
+<article class="post-single">
+    <div id="single-content">
+        <header class="post-header">
+            <div class="breadcrumbs"><a href="http://fangw.online">主页</a>&nbsp;»&nbsp;<a href="http://fangw.online/posts/">📚文章</a>&nbsp;»&nbsp;<a href="http://fangw.online/posts/tech/">👨🏻‍💻 技术</a></div>
+            <h1 class="post-title">
+                Tech
+            </h1>
+            <div class="post-meta">创建:&nbsp;<span title='2022-05-05 00:17:58 +0800 CST'>2022-05-05</span>&nbsp;|&nbsp;更新:&nbsp;2022-05-05&nbsp;|&nbsp;字数:&nbsp;1389字&nbsp;|&nbsp;时长:&nbsp;3分钟&nbsp;|&nbsp;
+作者:&nbsp;Patrick
+
+
+
+                &nbsp;|&nbsp;标签: &nbsp;
+                <ul class="post-tags-meta">
+                    <a href="http://fangw.online/tags/tech/">tech</a>
+                </ul>
+
+                
+                <span id="busuanzi_container_page_pv">
+                &nbsp;| 访问: <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+</div>
+        </header> 
+        <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">文章目录</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e7%94%9f%e6%88%90%e8%ae%a2%e5%8d%9530%e5%88%86%e9%92%9f%e6%9c%aa%e6%94%af%e4%bb%98%e5%88%99%e8%87%aa%e5%8a%a8%e5%8f%96%e6%b6%88%e8%af%a5%e6%80%8e%e4%b9%88%e5%ae%9e%e7%8e%b0" aria-label="生成订单30分钟未支付，则自动取消，该怎么实现？">生成订单30分钟未支付，则自动取消，该怎么实现？</a><ul>
+                        
+                <li>
+                    <a href="#%e6%95%b0%e6%8d%ae%e5%ba%93%e8%bd%ae%e8%af%a2-" aria-label="数据库轮询 👍">数据库轮询 👍</a></li>
+                <li>
+                    <a href="#jdk%e7%9a%84%e5%bb%b6%e8%bf%9f%e9%98%9f%e5%88%97-" aria-label="JDK的延迟队列 🙊">JDK的延迟队列 🙊</a></li>
+                <li>
+                    <a href="#%e6%97%b6%e9%97%b4%e8%bd%ae%e7%ae%97%e6%b3%95-" aria-label="时间轮算法 🙊">时间轮算法 🙊</a></li>
+                <li>
+                    <a href="#redis%e7%bc%93%e5%ad%98%e8%bf%87%e6%9c%9f%e7%9b%91%e5%90%ac-" aria-label="redis缓存过期监听 🙊">redis缓存过期监听 🙊</a></li>
+                <li>
+                    <a href="#redission-rdelayedqueue" aria-label="Redission RDelayedQueue">Redission RDelayedQueue</a></li>
+                <li>
+                    <a href="#%e6%b6%88%e6%81%af%e9%98%9f%e5%88%97-" aria-label="消息队列 👍">消息队列 👍</a><ul>
+                        
+                <li>
+                    <a href="#rocketmq-%e5%ae%9e%e7%8e%b0" aria-label="RocketMQ 实现">RocketMQ 实现</a></li>
+                <li>
+                    <a href="#kafka-%e5%ae%9e%e7%8e%b0" aria-label="Kafka 实现">Kafka 实现</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+        
+        activeElement = elements[0];
+        const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+        document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+    }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        activeElement = Array.from(elements).find((element) => {
+            if ((getOffsetTop(element) - window.pageYOffset) > 0 &&
+                (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                return element;
+            }
+        }) || activeElement
+
+        elements.forEach(element => {
+            const id = encodeURI(element.getAttribute('id')).toLowerCase();
+            if (element === activeElement){
+                document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+            } else {
+                document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+            }
+        })
+    }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;
+    }
+</script>
+        
+        <div class="post-content"><h1 id="生成订单30分钟未支付则自动取消该怎么实现">生成订单30分钟未支付，则自动取消，该怎么实现？<a hidden class="anchor" aria-hidden="true" href="#生成订单30分钟未支付则自动取消该怎么实现">#</a></h1>
+<p>在开发中，往往会遇到一些关于延时任务的需求。例如</p>
+<ul>
+<li>生成订单<code>30</code>分钟未支付，则自动取消</li>
+<li>生成订单<code>60</code>秒后,给用户发短信</li>
+</ul>
+<p>对上述的任务，我们给一个专业的名字来形容，那就是延时任务。那么这里就会产生一个问题，这个延时任务和定时任务的区别究竟在哪里呢？一共有如下几点区别</p>
+<ul>
+<li>定时任务有明确的触发时间，延时任务没有</li>
+<li>定时任务有执行周期，而延时任务在某事件触发后一段时间内执行，没有执行周期</li>
+<li>定时任务一般执行的是批处理操作是多个任务，而延时任务一般是单个任务</li>
+</ul>
+<p>一般实现的方法有几种：</p>
+<ul>
+<li>使用 rocketmq、rabbitmq、pulsar 等消息队列的延时投递功能</li>
+<li>使用 redisson 提供的 DelayedQueue</li>
+</ul>
+<p>有一些方案虽然广为流传但存在着致命缺陷，<strong>不要用来实现延时任务</strong></p>
+<ul>
+<li>使用 redis 的过期监听</li>
+<li>使用 rabbitmq 的死信队列</li>
+<li>使用非持久化的时间轮</li>
+</ul>
+<h2 id="数据库轮询-">数据库轮询 👍<a hidden class="anchor" aria-hidden="true" href="#数据库轮询-">#</a></h2>
+<blockquote>
+<p>数据量，并发量并不大的系统，可以使用这个方案。</p>
+</blockquote>
+<p>该方案通常是在小型项目中使用，即通过一个线程定时的去扫描数据库，通过订单时间来判断是否有超时的订单，然后进行<code>update</code>或<code>delete</code>等操作。</p>
+<ul>
+<li>优点: 简单易行，支持集群操作</li>
+<li>缺点:
+<ul>
+<li>(1)对服务器内存消耗大</li>
+<li>(2)存在延迟，比如你每隔3分钟扫描一次，那最坏的延迟时间就是<code>3</code>分钟</li>
+<li>(3)假设你的订单有几千万条，每隔几分钟这样扫描一次，数据库损耗极大</li>
+</ul>
+</li>
+</ul>
+<h2 id="jdk的延迟队列-">JDK的延迟队列 🙊<a hidden class="anchor" aria-hidden="true" href="#jdk的延迟队列-">#</a></h2>
+<p>该方案是利用<code>JDK</code>自带的<code>DelayQueue</code>来实现，这是一个无界阻塞队列，该队列只有在延迟期满的时候才能从中获取元素，放入<code>DelayQueue</code>中的对象，是必须实现<code>Delayed</code>接口的。</p>
+<ul>
+<li>优点: 效率高,任务触发时间延迟低。
+<ul>
+<li>缺点:</li>
+<li>(1)服务器重启后，数据全部消失，怕宕机</li>
+<li>(2)集群扩展相当麻烦</li>
+<li>(3)因为内存条件限制的原因，比如下单未付款的订单数太多，那么很容易就出现OOM异常</li>
+<li>(4)代码复杂度较高</li>
+</ul>
+</li>
+</ul>
+<h2 id="时间轮算法-">时间轮算法 🙊<a hidden class="anchor" aria-hidden="true" href="#时间轮算法-">#</a></h2>
+<p>时间轮是一种很优秀的定时任务的数据结构，然而绝大多数时间轮实现是纯内存没有持久化的。</p>
+<h2 id="redis缓存过期监听-">redis缓存过期监听 🙊<a hidden class="anchor" aria-hidden="true" href="#redis缓存过期监听-">#</a></h2>
+<p>Redis 官方手册的keyspace-notifications: timing-of-expired-events中明确指出：</p>
+<blockquote>
+<p>Basically expired events are generated when the Redis server deletes the key and not when the time to live theoretically reaches the value of zero</p>
+</blockquote>
+<p><code>redis</code> 自动过期的实现方式是：定时任务离线扫描并删除部分过期键；在访问键时惰性检查是否过期并删除过期键。<code>redis</code> 从未保证会在设定的过期时间立即删除并发送过期通知。实际上，过期通知晚于设定的过期时间数分钟的情况也比较常见。</p>
+<p>此外键空间通知采用的是发送即忘(fire and forget)策略，并不像消息队列一样保证送达。当订阅事件的客户端会丢失所有在断线期间所有分发给它的事件。</p>
+<h2 id="redission-rdelayedqueue">Redission RDelayedQueue<a hidden class="anchor" aria-hidden="true" href="#redission-rdelayedqueue">#</a></h2>
+<p>redisson delayqueue 是一种基于 redis zset 结构的延时队列实现。delayqueue 中有一个名为 timeoutSetName 的有序集合，其中元素的 score 为投递时间戳。delayqueue 会定时使用 zrangebyscore 扫描已到投递时间的消息，然后把它们移动到就绪消息列表中。</p>
+<p>delayqueue 保证 redis 不崩溃的情况下不会丢失消息，在没有更好的解决方案时不妨一试。</p>
+<p>在数据库索引设计良好的情况下，定时扫描数据库中未完成的订单产生的开销并没有想象中那么大。在使用 redisson delayqueue 等定时任务中间件时可以同时使用扫描数据库的方法作为补偿机制，避免中间件故障造成任务丢失。</p>
+<p><a href="../redis/delay-queue">基于 Redis 实现延迟队列</a></p>
+<h2 id="消息队列-">消息队列 👍<a hidden class="anchor" aria-hidden="true" href="#消息队列-">#</a></h2>
+<ul>
+<li>优点: 高效,可以利用消息队列的分布式特性轻易的进行横向扩展,消息支持持久化增加了可靠性。</li>
+<li>缺点：依赖消息队列，复杂度和成本变高</li>
+</ul>
+<h3 id="rocketmq-实现">RocketMQ 实现<a hidden class="anchor" aria-hidden="true" href="#rocketmq-实现">#</a></h3>
+<h3 id="kafka-实现">Kafka 实现<a hidden class="anchor" aria-hidden="true" href="#kafka-实现">#</a></h3>
+
+
+        </div>
+        <div class="post-reward">
+            <div style="padding: 0 0 0 0; margin: 0 0 0 0; width: 100%; font-size:16px; text-align: center;">
+                <div id="QR" style="opacity: 0;">
+                    <div id="wechat" style="display: inline-block">
+                        <a class="fancybox" rel="group">
+                            <img id="wechat_qr" src="https://www.sulvblog.cn/img/wechat_pay.png" alt="wechat_pay"></a>
+                        <p>微信</p>
+                    </div>
+                    <div id="alipay" style="display: inline-block">
+                        <a class="fancybox" rel="group">
+                            <img id="alipay_qr" src="https://www.sulvblog.cn/img/alipay.png" alt="alipay"></a>
+                        <p>支付宝</p>
+                    </div>
+                </div>
+                <button id="rewardButton"
+                        onclick="
+                    var qr = document.getElementById('QR');
+                    if (qr.style.opacity === '0') {
+                        qr.style.opacity='1';
+                    } else {
+                        qr.style.opacity='0'
+                    }"
+                >
+                    <span>🧧 鼓励</span>
+                </button>
+            </div>
+        </div>
+
+        <footer class="post-footer">
+            
+<nav class="paginav">
+  <a class="prev" href="http://fangw.online/posts/read/read/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>Read</span>
+  </a>
+  <a class="next" href="http://fangw.online/posts/tech/tech/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>Tech</span>
+  </a>
+</nav>
+
+        </footer>
+    </div>
+
+
+
+<div>
+    <div class="pagination__title">
+        <span class="pagination__title-h" style="font-size: 20px;">💬评论</span>
+        <hr />
+    </div>
+
+    <div id="tcomment"></div>
+
+    <script src="https://cdn.staticfile.org/twikoo/1.4.11/twikoo.all.min.js">
+    </script>
+    
+
+    
+
+    <script>
+        twikoo.init({
+            envId: "", 
+            el: "#tcomment",
+            lang: 'zh-CN',
+            region: 'ap-guangzhou',
+            path: window.TWIKOO_MAGIC_PATH||window.location.pathname,
+            
+            
+            
+            
+            
+            
+            
+        });
+    </script>
+
+</div>
+</article>
+</main>
+
+
+<script async src="https://unpkg.com/mermaid@8.8.1/dist/mermaid.min.js"></script>
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<footer class="footer">
+    <span>
+        Copyright
+        &copy;
+        2020-2022 
+        <a href="http://fangw.online" style="color:#939393;">Patrick&#39;s Blog</a>
+         All Rights Reserved
+    </span>
+
+    <a href="https://beian.miit.gov.cn/" target="_blank" style="color:#939393;">沪ICP备20014522号</a>&nbsp;
+
+    <span>
+        <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=null"style="display:inline-block;text-decoration:none;height:20px;color:#939393;">
+            
+            沪ICP备20014522号-1
+        </a>
+    </span>
+
+    <span id="busuanzi_container">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        总访客数: <span id="busuanzi_value_site_uv"></span>
+        总访问量: <span id="busuanzi_value_site_pv"></span>
+    </span>
+    
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <span class="topInner">
+        <svg class="topSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+            <path d="M12 6H0l6-6z"/>
+        </svg>
+        <span id="read_progress"></span>
+    </span>
+</a>
+
+<script>
+    document.addEventListener('scroll', function (e) {
+        const readProgress = document.getElementById("read_progress");
+        const scrollHeight = document.documentElement.scrollHeight;
+        const clientHeight = document.documentElement.clientHeight;
+        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        
+        readProgress.innerText = ((scrollTop / (scrollHeight - clientHeight)).toFixed(2) * 100).toFixed(0);
+    })
+</script>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+
+<script>
+    document.body.addEventListener('copy', function (e) {
+        if (window.getSelection().toString() && window.getSelection().toString().length > 50) {
+            let clipboardData = e.clipboardData || window.clipboardData;
+            if (clipboardData) {
+                e.preventDefault();
+                let htmlData = window.getSelection().toString() +
+                    '\r\n\n————————————————\r\n' +
+                    '版权声明：本文为「'+"Patrick's Blog"+'」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。' +
+                    '\r\n原文链接：' + location.href;
+                let textData = window.getSelection().toString() +
+                    '\r\n\n————————————————\r\n' +
+                    '版权声明：本文为「'+"Patrick's Blog"+'」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。' +
+                    '\r\n原文链接：' + location.href;
+                clipboardData.setData('text/html', htmlData);
+                clipboardData.setData('text/plain', textData);
+            }
+        }
+    });
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = '📄复制';
+
+        function copyingDone() {
+            copybutton.innerText = '👌🏻已复制!';
+            setTimeout(() => {
+                copybutton.innerText = '📄复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                let text = codeblock.textContent +
+                    '\r\n————————————————\r\n' +
+                    '版权声明：本文为「'+"Patrick's Blog"+'」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。' +
+                    '\r\n原文链接：' + location.href;
+                navigator.clipboard.writeText(text);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) {
+            }
+            ;
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://fangw1.github.io/blog/sitemap.xml

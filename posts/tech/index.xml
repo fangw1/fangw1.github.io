@@ -2,35 +2,35 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>👨🏻‍💻 技术 on Patrick&#39;s Blog</title>
-    <link>https://fangw1.github.io/blog/posts/tech/</link>
+    <link>https://blog.fangw.online/blog/posts/tech/</link>
     <description>Recent content in 👨🏻‍💻 技术 on Patrick&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 06 Sep 2022 15:16:42 +0800</lastBuildDate><atom:link href="https://fangw1.github.io/blog/posts/tech/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 06 Sep 2022 15:16:42 +0800</lastBuildDate><atom:link href="https://blog.fangw.online/blog/posts/tech/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Distributed Lock</title>
-      <link>https://fangw1.github.io/blog/posts/tech/distributed-lock/</link>
+      <link>https://blog.fangw.online/blog/posts/tech/distributed-lock/</link>
       <pubDate>Tue, 06 Sep 2022 15:16:42 +0800</pubDate>
       
-      <guid>https://fangw1.github.io/blog/posts/tech/distributed-lock/</guid>
+      <guid>https://blog.fangw.online/blog/posts/tech/distributed-lock/</guid>
       <description>分布式锁</description>
     </item>
     
     <item>
       <title>auto_cancel</title>
-      <link>https://fangw1.github.io/blog/posts/tech/auto_cancel/</link>
+      <link>https://blog.fangw.online/blog/posts/tech/auto_cancel/</link>
       <pubDate>Thu, 05 May 2022 00:17:58 +0800</pubDate>
       
-      <guid>https://fangw1.github.io/blog/posts/tech/auto_cancel/</guid>
+      <guid>https://blog.fangw.online/blog/posts/tech/auto_cancel/</guid>
       <description>生成订单30分钟未支付，则自动取消，该怎么实现？ 在开发中，往往会遇到一些关于延时任务的需求。例如 生成订单30分钟未支付，则自动取消 生成订单6</description>
     </item>
     
     <item>
       <title>Tech</title>
-      <link>https://fangw1.github.io/blog/posts/tech/tech/</link>
+      <link>https://blog.fangw.online/blog/posts/tech/tech/</link>
       <pubDate>Thu, 05 May 2022 00:17:58 +0800</pubDate>
       
-      <guid>https://fangw1.github.io/blog/posts/tech/tech/</guid>
+      <guid>https://blog.fangw.online/blog/posts/tech/tech/</guid>
       <description>For test;</description>
     </item>
     

@@ -8,21 +8,21 @@
     <language>zh-cn</language>
     <lastBuildDate>Thu, 05 May 2022 00:17:58 +0800</lastBuildDate><atom:link href="https://www.fangw.online/tags/tech/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>auto_cancel</title>
-      <link>https://www.fangw.online/posts/tech/auto_cancel/</link>
-      <pubDate>Thu, 05 May 2022 00:17:58 +0800</pubDate>
-      
-      <guid>https://www.fangw.online/posts/tech/auto_cancel/</guid>
-      <description>生成订单30分钟未支付，则自动取消，该怎么实现？ 在开发中，往往会遇到一些关于延时任务的需求。例如 生成订单30分钟未支付，则自动取消 生成订单6</description>
-    </item>
-    
-    <item>
       <title>Tech</title>
       <link>https://www.fangw.online/posts/tech/tech/</link>
       <pubDate>Thu, 05 May 2022 00:17:58 +0800</pubDate>
       
       <guid>https://www.fangw.online/posts/tech/tech/</guid>
       <description>For test</description>
+    </item>
+    
+    <item>
+      <title>订单自动取消</title>
+      <link>https://www.fangw.online/posts/tech/auto_cancel/</link>
+      <pubDate>Thu, 05 May 2022 00:17:58 +0800</pubDate>
+      
+      <guid>https://www.fangw.online/posts/tech/auto_cancel/</guid>
+      <description>订单自动取消</description>
     </item>
     
   </channel>

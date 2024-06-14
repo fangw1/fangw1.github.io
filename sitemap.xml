@@ -3,18 +3,21 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://www.fangw.online/posts/tech/</loc>
-    <lastmod>2022-09-06T15:16:42+08:00</lastmod>
+    <lastmod>2024-06-14T15:35:23+08:00</lastmod>
   </url><url>
     <loc>https://www.fangw.online/posts/</loc>
-    <lastmod>2022-09-06T15:16:42+08:00</lastmod>
+    <lastmod>2024-06-14T15:35:23+08:00</lastmod>
+  </url><url>
+    <loc>https://www.fangw.online/</loc>
+    <lastmod>2024-06-14T15:35:23+08:00</lastmod>
+  </url><url>
+    <loc>https://www.fangw.online/posts/tech/common_tools/</loc>
+    <lastmod>2024-06-14T15:35:23+08:00</lastmod>
   </url><url>
     <loc>https://www.fangw.online/posts/tech/distributed-lock/</loc>
     <lastmod>2022-09-06T15:16:42+08:00</lastmod>
   </url><url>
     <loc>https://www.fangw.online/tags/lock/</loc>
-    <lastmod>2022-09-06T15:16:42+08:00</lastmod>
-  </url><url>
-    <loc>https://www.fangw.online/</loc>
     <lastmod>2022-09-06T15:16:42+08:00</lastmod>
   </url><url>
     <loc>https://www.fangw.online/tags/</loc>
@@ -47,13 +50,13 @@
     <loc>https://www.fangw.online/posts/read/read/</loc>
     <lastmod>2022-05-05T00:18:06+08:00</lastmod>
   </url><url>
-    <loc>https://www.fangw.online/posts/tech/auto_cancel/</loc>
-    <lastmod>2022-05-05T00:17:58+08:00</lastmod>
-  </url><url>
     <loc>https://www.fangw.online/tags/tech/</loc>
     <lastmod>2022-05-05T00:17:58+08:00</lastmod>
   </url><url>
     <loc>https://www.fangw.online/posts/tech/tech/</loc>
+    <lastmod>2022-05-05T00:17:58+08:00</lastmod>
+  </url><url>
+    <loc>https://www.fangw.online/posts/tech/auto_cancel/</loc>
     <lastmod>2022-05-05T00:17:58+08:00</lastmod>
   </url><url>
     <loc>https://www.fangw.online/links/</loc>

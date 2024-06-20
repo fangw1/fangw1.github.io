@@ -3,13 +3,16 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://www.fangw.online/posts/tech/</loc>
-    <lastmod>2024-06-14T15:35:23+08:00</lastmod>
+    <lastmod>2024-06-20T11:04:28+08:00</lastmod>
   </url><url>
     <loc>https://www.fangw.online/posts/</loc>
-    <lastmod>2024-06-14T15:35:23+08:00</lastmod>
+    <lastmod>2024-06-20T11:04:28+08:00</lastmod>
   </url><url>
     <loc>https://www.fangw.online/</loc>
-    <lastmod>2024-06-14T15:35:23+08:00</lastmod>
+    <lastmod>2024-06-20T11:04:28+08:00</lastmod>
+  </url><url>
+    <loc>https://www.fangw.online/posts/tech/redis/redis-zset-cli/</loc>
+    <lastmod>2024-06-20T11:04:28+08:00</lastmod>
   </url><url>
     <loc>https://www.fangw.online/posts/tech/common_tools/</loc>
     <lastmod>2024-06-14T15:35:23+08:00</lastmod>
